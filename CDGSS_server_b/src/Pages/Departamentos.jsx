@@ -49,7 +49,7 @@ function Departamentos() {
                                     </a>
                                 </li>
                                 <li className="nav-item">
-                                    <a className="nav-link" href="/users">
+                                    <a className="nav-link" href="/usuarios">
                                         Usuarios
                                     </a>
                                 </li>

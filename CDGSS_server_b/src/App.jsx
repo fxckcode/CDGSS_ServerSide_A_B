@@ -7,6 +7,8 @@ import Registro from './Pages/Registro.jsx';
 import Login from './Pages/Login.jsx';
 import Dashboard from './Pages/Dashboard.jsx';
 import Departamentos from './Pages/Departamentos.jsx';
+import Lugares from './Pages/Lugares.jsx';
+import Usuarios from './Pages/Usuarios.jsx';
 
 function App() {
     useEffect(() => {
@@ -19,6 +21,8 @@ function App() {
             <Route path='/login' element={<Login />} />
             <Route path='/dashboard' element={<Dashboard />}/>
             <Route path='/departamentos' element={<Departamentos />} />
+            <Route path='/lugares' element={<Lugares />} />
+            <Route path='/usuarios' element={<Usuarios />} />
         </Routes>
     )
 }
