@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\DepartamentosController;
 use App\Http\Controllers\LugaresController;
 use App\Http\Controllers\UsersController;
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('v1')->group(function () {
+    Route::post('registro', [AuthController::class, 'registro']);
     Route::apiResource('users', UsersController::class);
     Route::apiResource('departamentos', DepartamentosController::class);
     Route::apiResource('lugares', LugaresController::class);
