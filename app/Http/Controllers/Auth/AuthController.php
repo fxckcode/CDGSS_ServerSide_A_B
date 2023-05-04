@@ -58,6 +58,8 @@ class AuthController extends Controller
             $user = User::where('email', $request['email'])->firstOrFail();
     
             $token = $user->createToken('api_token')->plainTextToken;
+            $user->api_token = $token;
+            $user->save();
     
             return response()->json([$user, $token], 200);
         } catch (\Exception $e) {
