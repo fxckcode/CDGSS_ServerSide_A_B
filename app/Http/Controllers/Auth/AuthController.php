@@ -22,7 +22,7 @@ class AuthController extends Controller
 
             if ($validator->fails()) {
                 return response()->json([
-                    'mensaje' => 'información no procesada',
+                    'mensaje' => 'inicio de sesión invalido',
                 ], 422);
             } elseif ($validator->passes()) {
                 $usuario = new User();
@@ -42,8 +42,7 @@ class AuthController extends Controller
             }
         } catch (\Exception $e) {
             return response()->json([
-                'mensaje' => 'información no procesada',
-                $e
+                'mensaje' => 'inicio de sesión invalido'
             ], 422);
         }
     }
@@ -53,7 +52,7 @@ class AuthController extends Controller
         try {
             if (!Auth::attempt($request->only('email', 'password'))) {            
                 return response()->json([
-                    'mensaje' => 'información no procesada'
+                    'mensaje' => 'inicio de sesión invalido'
                 ], 400);
             }
             $user = User::where('email', $request['email'])->firstOrFail();
@@ -63,22 +62,23 @@ class AuthController extends Controller
             return response()->json([$user, $token], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'mensaje' => 'información no procesada'
+                'mensaje' => 'inicio de sesión invalido'
             ], 400);
         }
     }
 
     public function logout(Request $request)
     {
-        // try {;
-        //     return response()->json([
-        //         $request->user()
-        //     ], 200);
-        // } catch (\Exception $e) {
-        //     return response()->json([
-        //         auth()->user()
-        //     ], 404);
-        // }
+        if (auth()->check()) {
+            $request->user()->currentAccessToken()->delete();
+            return response()->json([
+                'mensaje' => 'cierre de sesión correcto'
+            ], 200);
+        } else {
+            return response()->json([
+                'mensaje' => 'usuario no autorizado'
+            ], 401);
+        }
     }
 
 }
