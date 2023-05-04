@@ -17,7 +17,7 @@ class UsersSeeder extends Seeder
             'id' => 1,
             'nombre' => 'administrador',
             'email' => 'admin@colombia.co',
-            'password' => 'adminpass',
+            'password' => bcrypt('adminpass'),
             'rol' => 1
         ]);
 
@@ -26,7 +26,7 @@ class UsersSeeder extends Seeder
             'id' => 2,
             'nombre' => 'john doe',
             'email' => 'johndoe@gmai.com',
-            'password' => 'johnpass',
+            'password' => bcrypt('johnpass'),
             'rol' => 2
         ]);
     }   

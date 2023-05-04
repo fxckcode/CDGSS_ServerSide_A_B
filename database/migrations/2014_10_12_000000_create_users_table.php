@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->text('api_token')->nullable();
-            $table->enum('rol', ['administrador', 'turista']);
+            $table->enum('rol', ['ADMINISTRADOR', 'TURISTA']);
         });
     }
 
