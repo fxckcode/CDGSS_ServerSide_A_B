@@ -13,8 +13,14 @@ class UsersController extends Controller
     public function index()
     {
         try {
-            $usuarios = User::all();
-            return response()->json($usuarios, 200);
+            if (auth()->user()->rol == 'ADMINISTRADOR') {
+                $usuarios = User::all();
+                return response()->json($usuarios, 200);
+            } else {
+                return response()->json([
+                    'mensaje' => 'información no procesada'
+                ], 422);
+            }
         } catch (\Throwable $th) {
             return response()->json([
                 'mensaje' => 'información no procesada'

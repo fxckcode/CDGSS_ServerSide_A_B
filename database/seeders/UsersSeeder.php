@@ -25,7 +25,7 @@ class UsersSeeder extends Seeder
         User::insert([
             'id' => 2,
             'nombre' => 'john doe',
-            'email' => 'johndoe@gmai.com',
+            'email' => 'johndoe@gmail.com',
             'password' => bcrypt('johnpass'),
             'rol' => 2
         ]);

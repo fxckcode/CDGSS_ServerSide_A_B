@@ -6,10 +6,14 @@ import axios from 'axios';
 function Usuarios() {
     const [data, setData] = useState([])
     useEffect(() => {
-        axios.get('http://127.0.0.1:8000/api/v1/users')
-            .then((response) => {
+        const token = window.localStorage.getItem('token')
+        axios.get('http://127.0.0.1:8000/api/v1/users', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }).then((response) => {
                 setData(response.data)
-            })
+            })  
     }, [])
 
     return (
@@ -21,7 +25,7 @@ function Usuarios() {
 
                 <ul className="navbar-nav px-3">
                     <li className="nav-item text-nowrap">
-                        <a className="nav-link" href="#">
+                        <a className="nav-link" href="/logout">
                             Cerrar sesión
                         </a>
                     </li>
@@ -90,7 +94,7 @@ function Usuarios() {
                                             <tr key={index}>
                                                 <td>{d.nombre}</td>
                                                 <td>{d.email}</td>
-                                                <td></td>
+                                                <td>{d.api_token}</td>
                                                 <td>{d.rol.toUpperCase()}</td>
                                             </tr>
                                        )) 

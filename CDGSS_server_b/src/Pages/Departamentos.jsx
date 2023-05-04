@@ -7,16 +7,25 @@ function Departamentos() {
     const [data, setData] = useState([])
     const [departamento, setDepartamento] = useState('')
     const [search, setSearch] = useState('')
+    const token = window.localStorage.getItem('token')
 
     const createDepartamento = async (e) => {
         e.preventDefault()
         await axios.post('http://127.0.0.1:8000/api/v1/departamentos', {
             departamento: departamento
+        }, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
         })
         window.location.reload()
     }
     useEffect(() => {
-        axios.get('http://127.0.0.1:8000/api/v1/departamentos')
+        axios.get('http://127.0.0.1:8000/api/v1/departamentos', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
             .then((response) => {
                 setData(response.data)
             })
@@ -31,7 +40,7 @@ function Departamentos() {
 
                 <ul className="navbar-nav px-3">
                     <li className="nav-item text-nowrap">
-                        <a className="nav-link" href="#">
+                        <a className="nav-link" href="/logout">
                             Cerrar sesión
                         </a>
                     </li>

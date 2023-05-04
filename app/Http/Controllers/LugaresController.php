@@ -30,25 +30,31 @@ class LugaresController extends Controller
     public function store(Request $request)
     {
         try {
-            $request->validate([
-                'nombre' => 'required|string',
-                'descripcion' => 'required|string',
-                'imagen' => 'required|image',
-                'departamento_id' => 'required|integer'
-            ]);
-
-            $imagen = $request->file('imagen');
-            $nombreImagen = $imagen->getClientOriginalName();
-            $imagen->move(public_path('images'), $nombreImagen);
-
-            $lugar = new Lugares();
-            $lugar->nombre = $request->nombre;
-            $lugar->descripcion = $request->descripcion;
-            $lugar->imagen = $nombreImagen;
-            $lugar->departamento_id = $request->departamento_id;
-            $lugar->save();
-
-            return response()->json($lugar, 201);
+            if (auth()->user()->rol == "TURISTA") {
+                $request->validate([
+                    'nombre' => 'required|string',
+                    'descripcion' => 'required|string',
+                    'imagen' => 'required|image',
+                    'departamento_id' => 'required|integer'
+                ]);
+    
+                $imagen = $request->file('imagen');
+                $nombreImagen = $imagen->getClientOriginalName();
+                $imagen->move(public_path('images'), $nombreImagen);
+    
+                $lugar = new Lugares();
+                $lugar->nombre = $request->nombre;
+                $lugar->descripcion = $request->descripcion;
+                $lugar->imagen = $nombreImagen;
+                $lugar->departamento_id = $request->departamento_id;
+                $lugar->save();
+    
+                return response()->json($lugar, 201);
+            } else {
+                return response()->json([
+                    'mensaje' => 'usuario no autorizado'
+                ], 422);
+            }
         } catch (\Exception $e) {
             return response()->json([
                 'mensaje' => 'información no procesada'
@@ -91,15 +97,21 @@ class LugaresController extends Controller
     public function destroy(string $id)
     {
         try {
-            if (Lugares::find($id)) {
-                Lugares::destroy($id);
-                return response()->json([
-                    'mensaje' => 'eliminación correcta'
-                ], 200);
+            if (auth()->user()->rol == "ADMINISTRADOR") {
+                if (Lugares::find($id)) {
+                    Lugares::destroy($id);
+                    return response()->json([
+                        'mensaje' => 'eliminación correcta'
+                    ], 200);
+                } else {
+                    return response()->json([
+                        'mensaje' => 'información no procesada'
+                    ], 422);
+                }
             } else {
-                return response()->json([
-                    'mensaje' => 'información no procesada'
-                ], 422);
+               return response()->json([
+                    'mensaje' => 'usuario no autorizado'
+                ], 422); 
             }
         } catch (\Exception $e) {
             return response()->json([

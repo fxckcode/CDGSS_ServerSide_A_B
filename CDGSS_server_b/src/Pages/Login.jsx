@@ -1,11 +1,13 @@
 import "./css/bootstrap.min.css"
 import { useState } from 'react'
 import axios from 'axios'
+import { useNavigate } from "react-router-dom"
 
 function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const local = window.localStorage;
+  const navigate = useNavigate();
 
   const handleSubmit = event => {
     event.preventDefault()
@@ -16,6 +18,8 @@ function Login() {
     }).then((response) => {
       local.setItem('token', response.data[0].api_token)
     })
+
+    navigate('/dashboard')
   }
 
   return (

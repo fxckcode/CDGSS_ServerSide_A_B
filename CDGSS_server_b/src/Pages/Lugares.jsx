@@ -13,9 +13,14 @@ function Lugares() {
     const [descripcion, setDescripcion] = useState('')
     const [imagen, setImagen] = useState(null)
     const [departamentoId, setDepartamentoId] = useState('')
+    const token = window.localStorage.getItem('token')
 
     const deleteLugar = async (id) => {
-        await axios.delete(`http://127.0.0.1:8000/api/v1/lugares/${id}`)
+        await axios.delete(`http://127.0.0.1:8000/api/v1/lugares/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
         window.location.reload()
     }
 
@@ -28,19 +33,28 @@ function Lugares() {
             departamento_id: departamentoId
         }, {
             headers: {
-                'Content-Type': 'multipart/form-data'
+                'Content-Type': 'multipart/form-data',
+                Authorization: `Bearer ${token}`
             }
         })
         window.location.reload()
     }
 
     useEffect(() => {
-        axios.get('http://127.0.0.1:8000/api/v1/lugares')
+        axios.get('http://127.0.0.1:8000/api/v1/lugares', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
             .then((response) => {
                 setData(response.data)
             })
 
-        axios.get('http://127.0.0.1:8000/api/v1/departamentos')
+        axios.get('http://127.0.0.1:8000/api/v1/departamentos', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
             .then((response) => {
                 setDepartamentos(response.data)
             })
@@ -54,7 +68,7 @@ function Lugares() {
                 </a>
                 <ul className="navbar-nav px-3">
                     <li className="nav-item text-nowrap">
-                        <a className="nav-link" href="#">
+                        <a className="nav-link" href="/logout">
                             Cerrar sesión
                         </a>
                     </li>

@@ -13,8 +13,14 @@ class DepartamentosController extends Controller
     public function index()
     {
         try {
-            $departamentos = Departamentos::all();
-            return response()->json($departamentos, 200);
+            if (auth()->user()->rol == 'ADMINISTRADOR') {
+                $departamentos = Departamentos::all();
+                return response()->json([$departamentos], 200);
+            } else {
+                return response()->json([
+                    'mensaje' => 'usuario no autorizado'
+                ], 422);
+            }
         } catch (\Exception $e) {
             return response()->json([
                 'mensaje' => 'información no procesada'
@@ -28,20 +34,26 @@ class DepartamentosController extends Controller
     public function store(Request $request)
     {
         try {
-            $request->validate([
-                'departamento' => 'required|string'
-            ]);
-
-            $departamento = new Departamentos();
-            $departamento->departamento = $request->departamento;
-            $departamento->save();
-
-            $response = [
-                "id" => $departamento->id,
-                "departamento" => $departamento->departamento
-            ];
-
-            return response()->json($response, 201);
+            if (auth()->user()->rol == 'ADMINISTRADOR') {
+                $request->validate([
+                    'departamento' => 'required|string'
+                ]);
+    
+                $departamento = new Departamentos();
+                $departamento->departamento = $request->departamento;
+                $departamento->save();
+    
+                $response = [
+                    "id" => $departamento->id,
+                    "departamento" => $departamento->departamento
+                ];
+    
+                return response()->json($response, 201);
+            } else {
+                return response()->json([
+                    'mensaje' => 'usuario no autorizado'
+                ], 422);
+            }
         } catch (\Exception $e) {
             return response()->json([
                 'mensaje' => 'información no procesada'
@@ -55,17 +67,19 @@ class DepartamentosController extends Controller
     public function show(string $id)
     {
         try {
-            if (Departamentos::find($id)) {
-                $departamento = Departamentos::find($id);
-                $response = [
-                    'id' => $departamento->id,
-                    'departamento' => $departamento->departamento
-                ];
-                return response()->json($response, 200);
-            } else {
-                return response()->json([
-                    'mensaje' => 'información no procesada'
-                ], 422);
+            if (auth()->user()->rol == "ADMINISTRADOR") {
+                if (Departamentos::find($id)) {
+                    $departamento = Departamentos::find($id);
+                    $response = [
+                        'id' => $departamento->id,
+                        'departamento' => $departamento->departamento
+                    ];
+                    return response()->json($response, 200);
+                } else {
+                    return response()->json([
+                        'mensaje' => 'usuario no autorizado'
+                    ], 422);
+                }
             }
         } catch (\Exception $e) {
             return response()->json([
@@ -81,24 +95,30 @@ class DepartamentosController extends Controller
     public function update(Request $request, string $id)
     {
         try {
-            if (Departamentos::find($id)) {
-                $request->validate([
-                    'id' => 'required|integer',
-                    'departamento' => 'required|string'
-                ]);
+            if (auth()->user()->rol == 'ADMINISTRADOR') {
+                if (Departamentos::find($id)) {
+                    $request->validate([
+                        'id' => 'required|integer',
+                        'departamento' => 'required|string'
+                    ]);
 
-                $departamento = Departamentos::findOrFail($id)->update($request->all());
+                    $departamento = Departamentos::findOrFail($id)->update($request->all());
 
-                if ($departamento) {
-                    return response([
-                        'id' => Departamentos::find($id)->id,
-                        'departamento' => Departamentos::find($id)->departamento
-                    ], 200);
+                    if ($departamento) {
+                        return response([
+                            'id' => Departamentos::find($id)->id,
+                            'departamento' => Departamentos::find($id)->departamento
+                        ], 200);
+                    }
+
+                } else {
+                    return response()->json([
+                        'mensaje' => 'información no procesada'
+                    ], 422);
                 }
-
             } else {
                 return response()->json([
-                    'mensaje' => 'información no procesada'
+                    'mensaje' => 'usuario no autorizado'
                 ], 422);
             }
         } catch (\Throwable $th) {

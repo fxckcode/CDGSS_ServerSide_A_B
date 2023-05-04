@@ -9,20 +9,26 @@ import Dashboard from './Pages/Dashboard.jsx';
 import Departamentos from './Pages/Departamentos.jsx';
 import Lugares from './Pages/Lugares.jsx';
 import Usuarios from './Pages/Usuarios.jsx';
+import PrivateRoutes from './utils/PrivateRoutes.jsx';
+import Logout from './Pages/Logout.jsx';
 
 function App() {
     useEffect(() => {
         document.title = 'Colombia co'
     }, [])
+
     return (
         <Routes>
             <Route index element={<Home/>}/>
             <Route path='/registro' element={<Registro />} />
             <Route path='/login' element={<Login />} />
-            <Route path='/dashboard' element={<Dashboard />}/>
-            <Route path='/departamentos' element={<Departamentos />} />
-            <Route path='/lugares' element={<Lugares />} />
-            <Route path='/usuarios' element={<Usuarios />} />
+            <Route element={<PrivateRoutes/>} >
+                <Route path='/dashboard' element={<Dashboard />} exact />
+                <Route path='/departamentos' element={<Departamentos />} axact />
+                <Route path='/lugares' element={<Lugares />} exact />
+                <Route path='/usuarios' element={<Usuarios />} exact />
+                <Route path='/logout' element={<Logout />} />
+            </Route>
         </Routes>
     )
 }
