@@ -61,7 +61,7 @@ class AuthController extends Controller
             $user->api_token = $token;
             $user->save();
     
-            return response()->json([$user, $token], 200);
+            return response()->json([$user], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'mensaje' => 'inicio de sesión invalido'
